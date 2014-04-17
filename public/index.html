@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>untung</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//getbootstrap.com/examples/sticky-footer-navbar/sticky-footer-navbar.css">
+    
+  
+    
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Untung</a>
+        </div>
+        <div class="collapse navbar-collapse">
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="page-header">
+        <h1>Hari ini lebih baik dari kemarin ...</h1>
+        <span id="message">mengambil data ...</span>
+      </div>
+
+      <div id="diff">
+
+      </div>
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="text-muted">BlankOn 2014</p>
+      </div>
+    </div>
+    <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        console.log ("yeah");
+        $.getJSON("/untung", function (data){
+          $("#message").hide();
+          $("#diff").children().remove();
+
+          for (var i = 0; i < data.length; i++) {
+            var arch = data[i];
+            var archEl = $("<ul>");
+            for (var j = 0; j < arch.data.length; j++) {
+              var changedEl = $("<li>");
+              var changed = arch.data[j];
+              changedEl.text(changed.name + " " + changed.message + " " + changed.pver + " " + changed.cver);
+              archEl.append(changedEl);
+            }
+
+            var title = $("<span>").html("<b>" + arch.arch + "</b>");
+            $("#diff").append(title);
+            $("#diff").append(archEl);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
