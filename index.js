@@ -1,5 +1,5 @@
-var untung = require ("./lib/untung");
 var express = require ("express");
+var untung = require ("beruntung");
 var server = express();
 server.use(express.static(__dirname + "/public"));
 server.get("/untung", function(req, res){
@@ -8,3 +8,4 @@ server.get("/untung", function(req, res){
   });
 });
 server.listen(3000);
+console.log ("running,", 3000);

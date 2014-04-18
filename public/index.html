@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//getbootstrap.com/examples/sticky-footer-navbar/sticky-footer-navbar.css">
     
-  
-    
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -41,42 +38,66 @@
 
     <div class="container">
       <div class="page-header">
-        <h1>Hari ini lebih baik dari kemarin ...</h1>
-        <span id="message">mengambil data ...</span>
+        <h1>Hari ini lebih baik dari hari kemarin.</h1>
+        <p><a href="http://npmjs.org/untung-web">http://npmjs.org/untung-web</a></p>
+        <span id="message"><img src="./loader.gif" /> mengambil hanya untuk kamu saja, mohon bersabar...</span>
       </div>
 
-      <div id="diff">
+      <div id="updated">
+
+      </div>
+
+      <div id="downgraded">
+
+      </div>
+
+      <div id="added">
+
+      </div>
+
+      <div id="removed">
 
       </div>
     </div>
 
     <div id="footer">
       <div class="container">
-        <p class="text-muted">BlankOn 2014</p>
+        <p class="text-muted">&copy BlankOn 2014</p>
       </div>
     </div>
     <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
       $(function(){
-        console.log ("yeah");
+        console.log ("untung!");
         $.getJSON("/untung", function (data){
           $("#message").hide();
-          $("#diff").children().remove();
+          $("#downgraded").children().remove();
+          $("#added").children().remove();
+          $("#removed").children().remove();
+          $("#updated").children().remove();
+
+          function list (name, arch){
+            if (arch[name].length == 0) return;
+            var archEl = $("<ul>");
+            for (var j = 0; j < arch[name].length; j++) {
+              var changedEl = $("<li>");
+              var changed = arch[name][j];
+              var text = changed.name + " " + changed.from + " " + (changed.to ? ("↝ " + changed.to) : "")
+              changedEl.html(text);
+              archEl.append(changedEl);
+            }
+            var title = $("<span>").html("<b>" + arch.arch + "</b> (" + name + ")");
+            $("#" + name).append(title);
+            $("#" + name).append(archEl); 
+          }
 
           for (var i = 0; i < data.length; i++) {
             var arch = data[i];
-            var archEl = $("<ul>");
-            for (var j = 0; j < arch.data.length; j++) {
-              var changedEl = $("<li>");
-              var changed = arch.data[j];
-              changedEl.text(changed.name + " " + changed.message + " " + changed.pver + " " + changed.cver);
-              archEl.append(changedEl);
-            }
-
-            var title = $("<span>").html("<b>" + arch.arch + "</b>");
-            $("#diff").append(title);
-            $("#diff").append(archEl);
+            list("updated", arch);
+            list("downgraded", arch);
+            list("added", arch);
+            list("removed", arch);
           }
         });
       });
