@@ -40,6 +40,9 @@
       <div class="page-header">
         <h1>Hari ini lebih baik dari hari kemarin.</h1>
         <p><a href="http://npmjs.org/untung-web">http://npmjs.org/untung-web</a></p>
+        <p><a href="http://npmjs.org/beruntung">http://npmjs.org/beruntung</a></p>
+        <p><a target="_blank" href="http://cdimage.blankonlinux.or.id/blankon/livedvd-harian/current/">
+          Lihat konfigurasi dan log untuk rilis saat ini</a></p>
         <span id="message"><img src="./loader.gif" /> mengambil hanya untuk kamu saja, mohon bersabar...</span>
       </div>
 
@@ -58,6 +61,11 @@
       <div id="removed">
 
       </div>
+
+      <div id="log">
+
+      </div>
+
     </div>
 
     <div id="footer">
@@ -71,6 +79,7 @@
       $(function(){
         console.log ("untung!");
         $.getJSON("/untung", function (data){
+          
           $("#message").hide();
           $("#downgraded").children().remove();
           $("#added").children().remove();
@@ -92,12 +101,21 @@
             $("#" + name).append(archEl); 
           }
 
-          for (var i = 0; i < data.length; i++) {
-            var arch = data[i];
-            list("updated", arch);
-            list("downgraded", arch);
-            list("added", arch);
-            list("removed", arch);
+          if (data.log) {
+
+            var html = data.log.split("\n").join("<br>");
+            $("#log").html(html);
+
+          } else {
+
+            for (var i = 0; i < data.length; i++) {
+              var arch = data[i];
+              list("updated", arch);
+              list("downgraded", arch);
+              list("added", arch);
+              list("removed", arch);
+            }
+
           }
         });
       });
